@@ -1,8 +1,7 @@
 <script>
-    import { setContext, createEventDispatcher } from 'svelte'
     import * as Tone from 'tone';
-	
-    const dispatch = createEventDispatcher();
+    import { playing } from './notePlaying.js'
+    
     const synth = new Tone.Synth().toDestination();
     export let noteToPlay;
     let audioContextReady = false;
@@ -13,15 +12,19 @@
             console.log("Audio good to go!");
         };
         synth.triggerAttack(noteToPlay);
-        dispatch('otherNotePlayed');
-        console.log("Dispatched");
+        playing.set(noteToPlay)
     }
-    function stopNote(event) {
+    function stopNote() {
         console.log('Stopping');
         synth.triggerRelease();
     }
+    playing.subscribe(newVal => {
+        if (newVal != noteToPlay) {
+            stopNote();
+        }
+    })
 
 </script>
-<button on:click="{playNote}" on:otherNotePlayed={stopNote}>
+<button on:click="{playNote}">
     Play {noteToPlay}
 </button>
