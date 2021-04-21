@@ -19,6 +19,7 @@
         synth.triggerRelease();
     }
     playing.subscribe(newVal => {
+        // check if we're starting a different note, then stop the current note
         if (newVal != noteToPlay) {
             stopNote();
         }
