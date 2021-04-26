@@ -1,5 +1,5 @@
 <script>
-    import { playing } from "./notePlaying";
+    import { playing } from "./stores.js";
 
     function stop() {
         playing.set("None")

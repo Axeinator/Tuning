@@ -1,21 +1,20 @@
 <script>
     import * as Tone from 'tone';
-    import { playing } from './notePlaying.js'
+    import { playing, audioContextReady, octave } from './stores.js'
+    import { get } from 'svelte/store';
     
     const synth = new Tone.Synth().toDestination();
     export let noteToPlay;
-    let audioContextReady = false;
+    let octaveToPlay;
     async function playNote() {
         if (!audioContextReady) {
             await Tone.start();
-            audioContextReady = true;
-            console.log("Audio good to go!");
+            audioContextReady.set(true);
         };
-        synth.triggerAttack(noteToPlay);
+        synth.triggerAttack(noteToPlay + get(octave));
         playing.set(noteToPlay)
     }
     function stopNote() {
-        console.log('Stopping');
         synth.triggerRelease();
     }
     playing.subscribe(newVal => {
@@ -24,8 +23,11 @@
             stopNote();
         }
     })
+    octave.subscribe(newVal => {
+        octaveToPlay = newVal;
+    })
 
 </script>
 <button on:click="{playNote}">
-    Play {noteToPlay}
+    Play {noteToPlay}{octaveToPlay}
 </button>
