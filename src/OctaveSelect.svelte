@@ -13,9 +13,9 @@
         }
     }
 </script>
-<button on:click="{increaseOctave}">
+<button on:click="{increaseOctave}" disabled="{$octave >= 8}">
     Octave +
 </button>
-<button on:click="{decreaseOctave}">
+<button on:click="{decreaseOctave}" disabled="{$octave <= 0}">
     Octave -
 </button>
